@@ -25,11 +25,109 @@ export function activate(context: vscode.ExtensionContext) {
 	// 	vscode.window.showInformationMessage('Hello World!');
 	// });
 
-	context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaComponent', createComponent));
+    context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaComponent', createComponent));
+    context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaService', createService));
+	context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaInterface', createInterface));
 }
 
 function createComponent(args: any) {
 	promptAndSaveController(args, 'class');
+}
+
+function createService(args: any) {
+    promptAndSaveService(args, 'service');
+}
+
+function createInterface(args: any) {
+    promptAndSaveInterface(args, 'interface');
+}
+
+function promptAndSaveInterface(args: { _fsPath: any; } | null, templatetype: string) {
+    if (args == null) {
+        args = { _fsPath: vscode.workspace.rootPath }
+	}
+    let incomingpath: string = args._fsPath;
+    vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Please enter filename', value: 'new' + templatetype })
+        .then((newfilename) => {
+            if (typeof newfilename === 'undefined') {
+                return;
+            }
+
+            var newfilepath = incomingpath + path.sep + newfilename;
+			
+            if (fs.existsSync(newfilepath)) {
+                vscode.window.showErrorMessage("File already exists");
+                return;
+            }
+
+            newfilepath = correctExtension(newfilepath, "ts");
+
+            var originalfilepath = newfilepath;
+
+            var projectrootdir = getProjectRootDirOfFilePath(newfilepath);
+
+            if (projectrootdir == null) {
+                vscode.window.showErrorMessage("Unable to find package.json or *.ejs");
+                return;
+            }
+
+            projectrootdir = removeTrailingSeparator(projectrootdir);
+
+            var newroot = projectrootdir.substr(projectrootdir.lastIndexOf(path.sep) + 1);
+
+            var filenamechildpath = newfilepath.substring(newfilepath.lastIndexOf(newroot));
+
+            var pathSepRegEx = /\//g;
+            if (os.platform() === "win32")
+                pathSepRegEx = /\\/g;
+
+            newfilepath = path.basename(newfilepath, '.ts');
+			openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+        });
+}
+
+function promptAndSaveService(args: { _fsPath: any; } | null, templatetype: string) {
+    if (args == null) {
+        args = { _fsPath: vscode.workspace.rootPath }
+	}
+    let incomingpath: string = args._fsPath;
+    vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Please enter filename', value: 'new-' + templatetype })
+        .then((newfilename) => {
+            if (typeof newfilename === 'undefined') {
+                return;
+            }
+
+            var newfilepath = incomingpath + path.sep + newfilename;
+			
+            if (fs.existsSync(newfilepath)) {
+                vscode.window.showErrorMessage("File already exists");
+                return;
+            }
+
+            newfilepath = correctExtension(newfilepath, "ts");
+
+            var originalfilepath = newfilepath;
+
+            var projectrootdir = getProjectRootDirOfFilePath(newfilepath);
+
+            if (projectrootdir == null) {
+                vscode.window.showErrorMessage("Unable to find package.json or *.ejs");
+                return;
+            }
+
+            projectrootdir = removeTrailingSeparator(projectrootdir);
+
+            var newroot = projectrootdir.substr(projectrootdir.lastIndexOf(path.sep) + 1);
+
+            var filenamechildpath = newfilepath.substring(newfilepath.lastIndexOf(newroot));
+
+            var pathSepRegEx = /\//g;
+            if (os.platform() === "win32")
+                pathSepRegEx = /\\/g;
+
+            newfilepath = path.basename(newfilepath, '.ts');
+			openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+        });
 }
 
 function promptAndSaveController(args: { _fsPath: any; } | null, templatetype: string) {
@@ -37,7 +135,7 @@ function promptAndSaveController(args: { _fsPath: any; } | null, templatetype: s
         args = { _fsPath: vscode.workspace.rootPath }
 	}
     let incomingpath: string = args._fsPath;
-    vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Please enter filename', value: 'new_' + templatetype })
+    vscode.window.showInputBox({ ignoreFocusOut: true, prompt: 'Please enter filename', value: 'new' + templatetype })
         .then((newfilename) => {
             if (typeof newfilename === 'undefined') {
                 return;
@@ -169,9 +267,23 @@ function openTemplateAndSaveNewFile(type: string, filename: string, originalfile
     vscode.workspace.openTextDocument(vscode.extensions.getExtension('nishanc.aurelia-files')!.extensionPath + '/templates/' + templatefileName)
         .then((doc: vscode.TextDocument) => {
             let text = doc.getText();
+
+            if(type == 'service') {
+                let className = filename;
+                if(className.includes('-')) {
+                    let x = className.split("-");
+                    let word1 = capitalizeFirstLetter(x[0])
+                    let word2 = capitalizeFirstLetter(x[1])
+                    filename = word1 + word2;
+                }
+            }
+
+            filename = capitalizeFirstLetter(filename);
+
             text = text.replace('${classname}', filename);
             let cursorPosition = findCursorInTemlpate(text);
             text = text.replace('${cursor}', '');
+            console.log('originalfilepath',originalfilepath)
             fs.writeFileSync(originalfilepath, text);
 
             vscode.workspace.openTextDocument(originalfilepath).then((doc) => {
@@ -181,6 +293,10 @@ function openTemplateAndSaveNewFile(type: string, filename: string, originalfile
                 });
             });
         });
+}
+
+function capitalizeFirstLetter(word: string) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
 function findCursorInTemlpate(text: string) {

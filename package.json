@@ -3,7 +3,7 @@
 	"displayName": "Aurelia Files",
 	"author": "Nishan Chathuranga",
 	"description": "Quickly scaffold Aurelia file templates",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"repository": {
         "type": "git",
         "url": "https://github.com/nishanc/aurelia-files"
@@ -38,6 +38,14 @@
 			{
 				"command": "aurelia-files.addAureliaComponent",
 				"title": "Generate Aurelia Component"
+			},
+			{
+				"command": "aurelia-files.addAureliaService",
+				"title": "Generate Aurelia Service"
+			},
+			{
+				"command": "aurelia-files.addAureliaInterface",
+				"title": "Generate Aurelia Interface"
 			}
 		],
 		"menus": {
@@ -45,6 +53,16 @@
 				{
 					"when": "config.aurelia.menu.component",
 					"command": "aurelia-files.addAureliaComponent",
+					"group": "navigation@-1"
+				},
+				{
+					"when": "config.aurelia.menu.component",
+					"command": "aurelia-files.addAureliaService",
+					"group": "navigation@-1"
+				},
+				{
+					"when": "config.aurelia.menu.component",
+					"command": "aurelia-files.addAureliaInterface",
 					"group": "navigation@-1"
 				}
 			]
