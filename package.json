@@ -4,6 +4,11 @@
 	"author": "Nishan Chathuranga",
 	"description": "Quickly scaffold Aurelia file templates",
 	"version": "0.1.0",
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/nishanc/aurelia-files"
+    },
+    "icon": "images/logo.png",
 	"publisher": "nishanc",
 	"engines": {
 		"vscode": "^1.43.0"
