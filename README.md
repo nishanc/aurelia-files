@@ -5,17 +5,17 @@ Welcome to Aurelia Files.  This VSCode extension provides extensions to the IDE 
 
 ## Features
 
-**Add Aurelia Component**
+**Generate Aurelia Component**
 
-![Add Aurelia Component](/images/newcomponent.gif)
+![Generate Aurelia Component](/images/newcomponent.gif)
 
-**Add Aurelia Service**
+**Generate Aurelia Service**
 
-![Add Aurelia Service](/images/newservice.gif)
+![Generate Aurelia Service](/images/newservice.gif)
 
-**Add Aurelia Interface**
+**Generate Aurelia Interface**
 
-![Add Aurelia Interface](/images/newinterface.gif)
+![Generate Aurelia Interface](/images/newinterface.gif)
 
 ## Release Notes
 ### 1.0.0
