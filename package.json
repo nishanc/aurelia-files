@@ -3,7 +3,7 @@
 	"displayName": "Aurelia Files",
 	"author": "Nishan Chathuranga",
 	"description": "Quickly scaffold Aurelia file templates",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"repository": {
         "type": "git",
         "url": "https://github.com/nishanc/aurelia-files"
