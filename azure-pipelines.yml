@@ -43,6 +43,6 @@ steps:
     echo ">>> Publish"
     yarn deploy
   displayName: Publish
-  condition: and succeeded()
+  condition: succeeded()
   env:
     VSCE_PAT: $(VSCE_PAT)
