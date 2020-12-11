@@ -13,17 +13,17 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "aurelia-files" is now active!');
+	console.log('Congratulations, "aurelia-files" is now active!');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	// let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+	// vscode.commands.registerCommand('extension.helloWorld', () => {
 	// 	// The code you place here will be executed every time your command is executed
 
 	// 	// Display a message box to the user
-	// 	vscode.window.showInformationMessage('Hello World!');
-	// });
+	//    vscode.window.showInformationMessage('Hello World!');
+	//});
 
     context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaComponent', createComponent));
     context.subscriptions.push(vscode.commands.registerCommand('aurelia-files.addAureliaService', createService));
@@ -82,7 +82,8 @@ function promptAndSaveInterface(args: { _fsPath: any; } | null, templatetype: st
                 pathSepRegEx = /\\/g;
 
             newfilepath = path.basename(newfilepath, '.ts');
-			openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+            openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+            vscode.window.showInformationMessage('Interface Created!');
         });
 }
 
@@ -126,7 +127,8 @@ function promptAndSaveService(args: { _fsPath: any; } | null, templatetype: stri
                 pathSepRegEx = /\\/g;
 
             newfilepath = path.basename(newfilepath, '.ts');
-			openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+            openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
+            vscode.window.showInformationMessage('Service Created!');
         });
 }
 
@@ -171,7 +173,8 @@ function promptAndSaveController(args: { _fsPath: any; } | null, templatetype: s
 
             newfilepath = path.basename(newfilepath, '.ts');
 			openTemplateAndSaveNewFile(templatetype, newfilepath, originalfilepath);
-			saveTemplate(args, 'template', newfilename);
+            saveTemplate(args, 'template', newfilename);
+            vscode.window.showInformationMessage('Component Created!');
         });
 }
 
